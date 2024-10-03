@@ -10,10 +10,6 @@ Google Translate Assistant is a desktop application built using `tkinter` and `g
 - **Clipboard Support**: Copy the translated text directly to your clipboard with a single click.
 - **Recent Translations**: View your recent translations for quick reference.
 
-## Demo
-
-![Google Translate Assistant Screenshot](screenshot.png)
-
 ## Installation
 
 ### Prerequisites
