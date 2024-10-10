@@ -1,14 +1,14 @@
 # Google Translate Assistant
 
-Google Translate Assistant is a desktop application built using `tkinter` and `googletrans` to provide seamless translation capabilities for multiple languages. This lightweight tool offers a user-friendly interface and supports theme switching, making it ideal for quick and efficient translations.
+Google Translate Assistant is a desktop application built using `customtkinter`, `tkinter`, and `googletrans` to provide seamless translation capabilities for multiple languages. This lightweight tool offers a user-friendly interface and supports theme customization, making it ideal for quick and efficient translations.
 
 ## Features
 
 - **Text Translation**: Translate text between any two languages supported by Google Translate.
-- **Language Auto-detection**: Automatically detect the source language for easy translations.
-- **Theme Switching**: Toggle between light and dark themes for a customized look.
-- **Clipboard Support**: Copy the translated text directly to your clipboard with a single click.
-- **Recent Translations**: View your recent translations for quick reference.
+- **Language Swap**: Easily swap source and target languages with a single click.
+- **Custom Themes**: Supports both light and dark themes for a customized look.
+- **User-friendly Interface**: Designed with a modern UI for enhanced usability using `customtkinter`.
+- **Error Handling**: Proper error messages for issues such as missing input text or same source and target languages.
 
 ## Installation
 
@@ -16,9 +16,10 @@ Google Translate Assistant is a desktop application built using `tkinter` and `g
 
 Ensure you have Python 3.x installed on your system. The application uses the following libraries:
 
-- `tkinter` (usually included with standard Python installations)
+- `customtkinter`
 - `googletrans==4.0.0-rc1`
-  
+- `Pillow`
+
 ### Setup
 
 1. Clone this repository to your local machine:
@@ -36,10 +37,15 @@ Ensure you have Python 3.x installed on your system. The application uses the fo
 3. Install the required dependencies:
 
     ```bash
-    pip install googletrans==4.0.0-rc1
+    pip install customtkinter googletrans==4.0.0-rc1 pillow
     ```
 
-4. Run the application:
+4. Make sure you have the required icon files in the same directory as the main script:
+    - `translator_icon_converted.png`
+    - `translator_icon_converted.ico` (for Windows users)
+    - `swap_icon_converted.png`
+
+5. Run the application:
 
     ```bash
     python translate_app.py
@@ -49,39 +55,51 @@ Ensure you have Python 3.x installed on your system. The application uses the fo
 
 1. Launch the application.
 2. Enter the text you want to translate in the **Input Text** area.
-3. Choose the source and target languages using the dropdown menus. By default, the source language is set to auto-detect, and the target language is set to Spanish.
+3. Choose the source and target languages using the dropdown menus. By default, the source language is set to English, and the target language is set to French.
 4. Click **Translate** to view the translated text.
-5. Use **Clear Text** to reset the input area, **Copy to Clipboard** to copy the translated text, and **Toggle Theme** to switch between light and dark modes.
+5. Use the **Swap Languages** button to quickly swap the source and target languages.
+6. The **Clear Text** button resets the input area, while the **Copy to Clipboard** feature is available to easily copy the translated text for use elsewhere.
 
 ## Code Overview
 
 ### Class: `TranslationApp`
 
-This is the main class of the application, which handles the user interface and interaction logic. It extends `tk.Tk` and `ThemeMixin` to provide theming support.
+This is the main class of the application, which combines translation functionality with the graphical interface.
 
 - **Attributes**:
-  - `__translator`: An instance of the `Translator` class for performing translations.
-  - `__languages`: Dictionary mapping language codes to language names (from `googletrans`).
-  - `translation_var`: A `StringVar` for storing and displaying the translated text dynamically.
-
+  - `__translator`: An instance of the `Translator` class from `googletrans` for performing translations.
+  - `src_lang_var` and `tgt_lang_var`: Variables to track the selected source and target languages.
+  - `src_text` and `tgt_text`: Widgets for the input and output text areas.
+  
 - **Methods**:
-  - `translate()`: Handles the translation process and updates the output label.
-  - `toggle_theme()`: Switches between light and dark themes.
+  - `perform_translation()`: Handles the translation process, error checking, and updating the output text.
+  - `swap_languages()`: Swaps the selected source and target languages for a quick reverse translation.
   - `clear_text()`: Clears the input text area.
-  - `copy_to_clipboard()`: Copies the translated text to the clipboard.
+  - `display_translation()`: Displays the translated text in the output area.
+  
+### Class: `BaseGUI`
+
+This class handles the graphical user interface (GUI) setup, such as creating menus, frames, and widgets. It also implements the theme switching and splash screen functionalities.
+
+- **Attributes**:
+  - `menu_bar`: A menu bar with options to exit and view the "About" section.
+  - `swap_button`: A button to swap the source and target languages.
+  - `theme_button`: A future feature for toggling between light and dark themes.
+  
+- **Methods**:
+  - `_create_widgets()`: Builds and arranges all the widgets, such as labels, text boxes, dropdown menus, and buttons.
+  - `_show_about_info()`: Displays application information.
 
 ### Decorators
-- **`@log_action`**: Logs each action performed.
-- **`@timing_decorator`**: Measures the time taken to perform an operation.
-  
+- **`@log_method_call`**: Logs each action performed to help track function calls during execution.
+
 ## Limitations
 
-- **Translation Accuracy**: The accuracy of translations may vary depending on the language pair and complexity of the input text.
+- **Translation Accuracy**: The accuracy of translations depends on Google Translate’s API and the complexity of the input text.
 - **Internet Requirement**: The application requires an active internet connection to use the Google Translate API.
-- **GoogleTrans Version Issues**: The current implementation uses `googletrans==4.0.0-rc1`. This library may experience issues due to API updates. Consider using a maintained alternative or updating the library if needed.
+- **GoogleTrans Version Issues**: The current implementation uses `googletrans==4.0.0-rc1`. This version might experience issues if Google’s API is updated. Consider checking for updates or alternatives if needed.
 
 ## Known Issues
 
-- Some language codes might not be properly recognized depending on the `googletrans` version.
-- Changing themes while translating might cause minor UI glitches in some environments.
-
+- Language codes might not always be correctly mapped depending on the version of `googletrans`.
+- The application might experience minor UI glitches when themes are toggled during translations.
